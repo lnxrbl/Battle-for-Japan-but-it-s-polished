@@ -1,0 +1,362 @@
+@font-face {
+  font-family: "BattleFont";
+  src: url("fonts/Canela-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+.score-num {
+  font-family: "BattleFont", serif;
+  font-weight: 700;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  font-family: Arial, sans-serif;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.025) 0px,
+      rgba(255, 255, 255, 0.025) 2px,
+      rgba(0, 0, 0, 0.025) 2px,
+      rgba(0, 0, 0, 0.025) 6px
+    ),
+    linear-gradient(180deg, #6f5338 0%, #5e452f 100%);
+  background-attachment: fixed;
+}
+
+body,
+button,
+#prefecture-tooltip,
+#radial-menu {
+  font-family: Arial, sans-serif;
+}
+
+.app {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.map-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.map-bg {
+  position: relative;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  border: 1px solid rgba(0, 0, 0, 0.18);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  background: #ddd3c1;
+}
+
+.map-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  position: relative;
+  z-index: 1;
+}
+
+svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 2;
+}
+
+svg path {
+  fill-opacity: 0;
+  cursor: pointer;
+  pointer-events: all;
+  transition: fill-opacity 0.15s ease;
+  stroke: #000;
+  stroke-width: 5;
+}
+
+svg path[id] {
+  fill: transparent;
+  fill-opacity: 1;
+  stroke: transparent;
+  stroke-width: 2.5;
+}
+
+svg path[id].prefecture-selected {
+  stroke: #f2ddcc;
+  stroke-opacity: 1;
+  filter: drop-shadow(0 0 4px rgba(0, 170, 255, 0.7));
+}
+
+button {
+  padding: 10px 16px;
+  font-size: 20px;
+  cursor: pointer;
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  border-radius: 8px;
+  font-weight: bold;
+  transition: transform 0.08s ease, opacity 0.15s ease, box-shadow 0.15s ease;
+}
+
+button:hover {
+  opacity: 0.92;
+  box-shadow:
+    inset 0 3px 8px rgba(0, 0, 0, 0.35),
+    inset 0 -1px 2px rgba(255, 255, 255, 0.2);
+  border-color: #222;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+#reset {
+  background: #5b4635;
+  color: #fff;
+}
+
+#prefecture-tooltip {
+  position: fixed;
+  display: none;
+  pointer-events: none;
+  z-index: 9999;
+  background: rgba(30, 24, 18, 0.95);
+  color: #f3ede2;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  white-space: nowrap;
+}
+
+.score-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.score-num {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 44px;
+  text-align: center;
+  font-size: clamp(22px, 2.2vw, 34px);
+  font-weight: 700;
+  line-height: 1;
+  color: #2c2219;
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.45),
+    0 0 4px rgba(255, 255, 255, 0.18);
+}
+
+.score-num-white {
+  color: #2c2219;
+}
+
+#red-score {
+  left: 15%;
+  top: 30.3%;
+}
+
+#orange-score {
+  left: 15%;
+  top: 34.3%;
+}
+
+#yellow-score {
+  left: 15%;
+  top: 38.5%;
+}
+
+#green-score {
+  left: 15%;
+  top: 42.6%;
+}
+
+#blue-score {
+  left: 15%;
+  top: 46.9%;
+}
+
+#purple-score {
+  left: 15%;
+  top: 51%;
+}
+
+#black-score {
+  left: 15%;
+  top: 55%;
+}
+
+#white-score {
+  left: 15%;
+  top: 59.3%;
+}
+
+#radial-menu {
+  --menu-size: 220px;
+  --center-size: 58px;
+  --option-size: 46px;
+  --orbit-radius: 78px;
+
+  position: fixed;
+  width: var(--menu-size);
+  height: var(--menu-size);
+  display: none;
+  z-index: 10000;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+
+#radial-menu.open {
+  display: block;
+}
+
+.radial-backdrop {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  pointer-events: auto;
+  background: rgba(70, 56, 45, 0.72);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.34),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.radial-center,
+.radial-option {
+  position: absolute;
+  pointer-events: auto;
+  border-radius: 999px;
+  border: 2px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+  z-index: 2;
+}
+
+.radial-center {
+  width: var(--center-size);
+  height: var(--center-size);
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 0;
+  background: rgba(40, 30, 22, 0.96);
+  color: #f3ede2;
+  font-size: 34px;
+  line-height: 1;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+}
+
+.radial-center:hover {
+  background: rgba(55, 41, 32, 0.98);
+}
+
+.radial-option {
+  width: var(--option-size);
+  height: var(--option-size);
+  padding: 0;
+  left: 50%;
+  top: 50%;
+  transform:
+    translate(-50%, -50%)
+    rotate(calc(var(--i) * 45deg))
+    translateY(calc(var(--orbit-radius) * -1))
+    rotate(calc(var(--i) * -45deg));
+}
+
+.radial-option:hover,
+.radial-option.active-color {
+  transform:
+    translate(-50%, -50%)
+    rotate(calc(var(--i) * 45deg))
+    translateY(calc(var(--orbit-radius) * -1))
+    rotate(calc(var(--i) * -45deg));
+  box-shadow:
+    0 6px 18px rgba(0, 0, 0, 0.35),
+    0 0 10px rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.45);
+  filter: brightness(1.08);
+}
+
+.radial-option::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.28);
+}
+
+.radial-option[data-color="#fc0000"] {
+  background: #fc0000;
+}
+
+.radial-option[data-color="#ff8000"] {
+  background: #ff8000;
+}
+
+.radial-option[data-color="#f5dc3a"] {
+  background: #f5dc3a;
+}
+
+.radial-option[data-color="#006633"] {
+  background: #006633;
+}
+
+.radial-option[data-color="#53b6f9"] {
+  background: #53b6f9;
+}
+
+.radial-option[data-color="#990099"] {
+  background: #990099;
+}
+
+.radial-option[data-color="#000000"] {
+  background: #000000;
+}
+
+.radial-option[data-color="#ffffff"] {
+  background: #ffffff;
+}
+
+.radial-option:focus-visible,
+.radial-center:focus-visible {
+  outline: 3px solid rgba(255, 255, 255, 0.75);
+  outline-offset: 2px;
+}
+
+#selection-box {
+  position: absolute;
+  display: none;
+  z-index: 4;
+  pointer-events: none;
+  border: 2px solid rgba(58, 49, 49, 0.9);
+  background: rgba(255, 255, 255, 0.16);
+  box-shadow:
+    0 0 0 2px rgba(0, 0, 0, 0.2),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+}
+
+.prefecture-selected {
+  stroke: #f2f5f7;
+  stroke-width: 2.5;
+  stroke-opacity: 1;
+  filter: brightness(2) drop-shadow(0 0 5px rgba(215, 230, 238, 0.785));
+}
